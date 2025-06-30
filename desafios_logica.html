@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Treinamento de Lógica de Programação</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .desafio {
+            margin-bottom: 30px;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin-top: 10px;
+        }
+        .solucao {
+            display: none;
+            background-color: #e8e8e8;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Treine sua Lógica</h1>
+
+        <div class="desafio">
+            <h2>1. Ordenar Números</h2>
+            <p>Dado um conjunto de números, descreva os passos para colocá-los em ordem crescente.</p>
+            <textarea placeholder="Escreva aqui sua lógica ou pseudocódigo..."></textarea>
+            <button onclick="toggleSolucao('sol1')">Mostrar Sugestão</button>
+            <div id="sol1" class="solucao">
+                <p>Exemplo de solução em pseudocódigo:</p>
+                <pre>
+para cada posição i na lista
+    para cada posição j após i
+        se lista[i] &gt; lista[j]
+            troque lista[i] com lista[j]
+                </pre>
+            </div>
+        </div>
+
+        <div class="desafio">
+            <h2>2. Número Primo</h2>
+            <p>Escreva os passos para verificar se um número é primo.</p>
+            <textarea placeholder="Escreva aqui sua lógica ou pseudocódigo..."></textarea>
+            <button onclick="toggleSolucao('sol2')">Mostrar Sugestão</button>
+            <div id="sol2" class="solucao">
+                <p>Exemplo de solução em pseudocódigo:</p>
+                <pre>
+se n &lt; 2 então não é primo
+para i de 2 até raiz quadrada de n
+    se n dividido por i for zero
+        não é primo
+se nenhum divisor foi encontrado
+    então é primo
+                </pre>
+            </div>
+        </div>
+
+        <div class="desafio">
+            <h2>3. Palíndromo</h2>
+            <p>Descreva uma lógica para verificar se uma palavra ou frase é um palíndromo (lê-se igual de trás para frente).</p>
+            <textarea placeholder="Escreva aqui sua lógica ou pseudocódigo..."></textarea>
+            <button onclick="toggleSolucao('sol3')">Mostrar Sugestão</button>
+            <div id="sol3" class="solucao">
+                <p>Exemplo de solução em pseudocódigo:</p>
+                <pre>
+remova espaços e coloque tudo em minúsculas
+crie uma string invertida
+compare a original sem espaços com a invertida
+se forem iguais, é palíndromo
+                </pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSolucao(id) {
+            var elemento = document.getElementById(id);
+            if (elemento.style.display === 'block') {
+                elemento.style.display = 'none';
+            } else {
+                elemento.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
