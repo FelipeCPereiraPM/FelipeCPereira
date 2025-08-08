@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ComDash - Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; background: #0b1220; color: #e3e8ef; }
+    header { padding: 16px 24px; border-bottom: 1px solid #1f2a44; display: flex; align-items: center; justify-content: space-between; }
+    .brand { font-weight: 700; letter-spacing: 0.3px; }
+    .container { padding: 24px; max-width: 1200px; margin: 0 auto; }
+    .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .card { background: #111a2e; border: 1px solid #1f2a44; border-radius: 12px; padding: 16px; }
+    .label { color: #a8b3cf; font-size: 12px; text-transform: uppercase; letter-spacing: 0.6px; }
+    .value { font-size: 24px; font-weight: 700; margin-top: 6px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+    canvas { background: #0d1629; border: 1px solid #1f2a44; border-radius: 10px; padding: 12px; }
+    a { color: #8ab4ff; text-decoration: none; }
+    @media (max-width: 900px){ .cards{grid-template-columns: repeat(2,1fr);} .grid{grid-template-columns: 1fr;} }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">ComDash</div>
+    <nav><a href="/admin/">Admin</a></nav>
+  </header>
+  <div class="container">
+    <div class="cards">
+      <div class="card"><div class="label">Leads (Total)</div><div id="leads_total" class="value">-</div></div>
+      <div class="card"><div class="label">Leads (30 dias)</div><div id="leads_last_30" class="value">-</div></div>
+      <div class="card"><div class="label">Taxa de Ganho</div><div id="win_rate" class="value">-</div></div>
+      <div class="card"><div class="label">NPS</div><div id="nps" class="value">-</div></div>
+    </div>
+
+    <div class="grid">
+      <div>
+        <h3>Negócios por etapa</h3>
+        <canvas id="byStage"></canvas>
+      </div>
+      <div>
+        <h3>Leads por status</h3>
+        <canvas id="leadsStatus"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function loadMetrics(){
+      const res = await fetch('/api/metrics/summary/');
+      const data = await res.json();
+      document.getElementById('leads_total').textContent = data.leads_total;
+      document.getElementById('leads_last_30').textContent = data.leads_last_30;
+      document.getElementById('win_rate').textContent = data.win_rate_pct + '%';
+      document.getElementById('nps').textContent = data.nps;
+
+      const stageLabels = data.by_stage.map(x => x.stage);
+      const stageValues = data.by_stage.map(x => x.total);
+      new Chart(document.getElementById('byStage'), {
+        type: 'bar',
+        data: { labels: stageLabels, datasets: [{ label: 'Negócios', data: stageValues, backgroundColor: '#4f46e5' }]},
+        options: { plugins: { legend: { display: false } } }
+      });
+
+      const leadLabels = data.leads_by_status.map(x => x.status);
+      const leadValues = data.leads_by_status.map(x => x.total);
+      new Chart(document.getElementById('leadsStatus'), {
+        type: 'doughnut',
+        data: { labels: leadLabels, datasets: [{ label: 'Leads', data: leadValues, backgroundColor: ['#22c55e','#eab308','#ef4444','#06b6d4'] }]},
+        options: { plugins: { legend: { position: 'bottom' } } }
+      });
+    }
+    loadMetrics();
+  </script>
+</body>
+</html>
